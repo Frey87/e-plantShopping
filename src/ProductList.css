@@ -10,6 +10,42 @@ body {
     background-color: #f0f0f0;
 }
 
+.cart-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 90px;
+  min-height: 75px;
+  padding: 8px 14px;
+
+  border: none;
+  background: transparent;
+  color: white;
+
+  cursor: pointer;
+}
+
+.cart-symbol {
+  display: block;
+  font-size: 32px;
+  line-height: 1;
+}
+
+.cart-count {
+  display: block;
+  margin-top: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.cart-button:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+}
+
 /* Navbar */
 .navbar {
     background-color: #4CAF50;

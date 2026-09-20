@@ -1,12 +1,25 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "./CartSlice";
 import "./ProductList.css";
 
-const ProductList = () => {
+const ProductList = ({ onHomeClick, onCartClick }) => {
   const dispatch = useDispatch();
 
+  const CartItems = useSelector((state) => state.cart.items);
+
   const [addedToCart, setAddedToCart] = useState({});
+
+  const calculateTotalQuantity = () => {
+    return CartItems
+      ? CartItems.reduce(
+          (total, item) => total + item.quantity,
+          0
+        )
+      : 0;
+  };
+
+
     const plantsArray = [
         {
             category: "Air Purifying Plants",
@@ -222,43 +235,81 @@ const ProductList = () => {
           [product.name]: true,
         }));
       };
-    
-      return (
-        <div className="product-list">
-          {plantsArray.map((category, categoryIndex) => (
-            <div className="plant-category" key={categoryIndex}>
-              <h2>{category.category}</h2>
-      
-              <div className="product-grid">
-                {category.plants.map((plant, plantIndex) => (
-                  <div className="product-card" key={`${plant.name}-${plantIndex}`}>
-                    <img
-                      src={plant.image}
-                      alt={plant.name}
-                      className="product-image"
-                    />
-      
-                    <h3>{plant.name}</h3>
-      
-                    <p>{plant.description}</p>
-      
-                    <p>{plant.cost}</p>
-      
-                    <button
-                      onClick={() => handleAddToCart(plant)}
-                      disabled={addedToCart[plant.name]}
-                    >
-                      {addedToCart[plant.name]
-                        ? "Added to Cart"
-                        : "Add to Cart"}
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      );
+
+    const handleCartClick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onCartClick();
     };
     
-    export default ProductList;
+return (
+  <div className="product-list">
+
+    <nav className="navbar">
+  <div
+    className="navbar-brand"
+    onClick={onHomeClick}
+  >
+    Paradise Nursery
+  </div>
+
+  <div className="navbar-title">
+    Plants
+  </div>
+
+  <button
+  className="cart-button"
+  onClick={handleCartClick}
+  type="button"
+>
+  <span className="cart-symbol">🛒</span>
+
+  <span className="cart-count">
+    Cart: {calculateTotalQuantity()}
+  </span>
+</button>
+</nav>
+
+    <div className="product-list">
+      {plantsArray.map((category, categoryIndex) => (
+        <div className="plant-category" key={categoryIndex}>
+          <h2>{category.category}</h2>
+
+          <div className="product-grid">
+            {category.plants.map((plant, plantIndex) => (
+              <div
+                className="product-card"
+                key={`${plant.name}-${plantIndex}`}
+              >
+                <img
+                  src={plant.image}
+                  alt={plant.name}
+                  className="product-image"
+                />
+
+                <h3>{plant.name}</h3>
+
+                <p>{plant.description}</p>
+
+                <p>{plant.cost}</p>
+
+                <button
+                  onClick={() => handleAddToCart(plant)}
+                  disabled={addedToCart[plant.name]}
+                >
+                  {addedToCart[plant.name]
+                    ? "Added to Cart"
+                    : "Add to Cart"}
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+
+  </div>
+);
+};
+    
+export default ProductList;
